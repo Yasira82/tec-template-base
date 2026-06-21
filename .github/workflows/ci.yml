@@ -11,6 +11,30 @@ permissions:
   contents: read
 
 jobs:
+  payment-policy:
+    name: Payment contract policy (ADR-009)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check payment contract + CSRF placement
+        run: |
+          violations=0
+          # ADR-009: internal-auth header + amount-as-number
+          if grep -rniE 'x-service-secret|SERVICE_SECRET' src; then
+            echo "::error::ADR-009: use x-internal-key / INTERNAL_SECRET (not x-service-secret / SERVICE_SECRET)"
+            violations=1
+          fi
+          if grep -rnE 'amount:[[:space:]]*z\.string' src | grep -qi payment; then
+            echo "::error::ADR-009: payment amount must be a number — no z.string() for amount in payment routes"
+            violations=1
+          fi
+          # P2: CSRF is middleware-only — no route-level CSRF validate-and-403
+          if grep -rnE 'csrfCookie !== csrfHeader|csrfCookie === csrfHeader|CSRF validation failed|CSRF token mismatch' src/app/api 2>/dev/null; then
+            echo "::error::CSRF must be enforced ONLY in middleware (P2). Remove route-level CSRF checks — they 403 legit Pi-Browser payments. (KB C-12 §11)"
+            violations=1
+          fi
+          [ "$violations" -eq 0 ] && echo "payment contract policy OK" || exit 1
+
   lint:
     name: Lint
     runs-on: ubuntu-latest
