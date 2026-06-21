@@ -32,6 +32,28 @@ export interface PaymentResult {
 // TODO(new app): set your app slug.
 const APP_SOURCE = 'app';
 
+const HUB_URL = process.env.NEXT_PUBLIC_HUB_URL ?? 'https://hub.tecosystem.app';
+
+/** ADR-007: true when the user arrived FROM the Hub (Pi session is foreign). */
+export const isHubNavigation = (): boolean =>
+  typeof document !== 'undefined' &&
+  document.referrer.toLowerCase().includes('hub.tecosystem.app');
+
+/** Mode 1 — hand the payment off to the Hub modal. `/hub?pay=1` is LOCKED (C-76/ADR-007). */
+export const redirectToHubPayment = (params: {
+  amount: number; itemId: string; memo?: string;
+}): void => {
+  if (typeof window === 'undefined') return;
+  const q = new URLSearchParams({
+    pay:    '1',
+    source: APP_SOURCE,
+    amount: String(params.amount),
+    item:   params.itemId,
+    ...(params.memo ? { memo: params.memo } : {}),
+  });
+  window.location.href = `${HUB_URL}/hub?${q.toString()}`;
+};
+
 /** Step 1 — create the payment record in tec-payment-service; returns internal id. */
 export const createPaymentRecord = async (
   amount: number, itemId: string, memo: string,
