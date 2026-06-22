@@ -69,11 +69,18 @@ src/app/api/auth/sso-callback/route.ts     Hub SSO landing (open-redirect-safe)
 src/app/api/auth/refresh/route.ts          token refresh
 src/app/api/bff/payment/{create,approve,complete,resolve-incomplete}/route.ts
 src/app/api/bff/items/route.ts             example domain route (copy this pattern)
+src/app/api/health/route.ts                health endpoint (C-92/C-96) — fail-safe, public, never 500s
 src/lib/pi-payment.ts                      createPaymentRecord + createU2APayment
+src/lib/observability/logger.ts            structured JSON logger (log.info/warn/error) — no silent failures (C-96)
 src/app/privacy/page.tsx · terms/page.tsx  Pi Portal legal pages
 src/styles/tec-design-tokens.css           import in app/layout.tsx
 .github/workflows/ci.yml                   payment-policy + CSRF guard + lint/typecheck/test/build
 ```
+
+**v2 (observability by default):** every new app ships `/api/health` (uniform C-92
+signal for the platform health runtime + observability scrape + SLO/runtime-evidence
+loop) and a structured `log` (use `log.error` in catch blocks — a silent error
+handler is an invisible failure, C-96).
 
 ---
 
