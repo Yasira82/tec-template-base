@@ -69,11 +69,24 @@ src/app/api/auth/sso-callback/route.ts     Hub SSO landing (open-redirect-safe)
 src/app/api/auth/refresh/route.ts          token refresh
 src/app/api/bff/payment/{create,approve,complete,resolve-incomplete}/route.ts
 src/app/api/bff/items/route.ts             example domain route (copy this pattern)
+src/app/api/health/route.ts                health endpoint (C-92/C-96) — fail-safe, public, never 500s
 src/lib/pi-payment.ts                      createPaymentRecord + createU2APayment
+src/lib/pi/PiRuntime.ts                    PAL — single choke-point for window.Pi.* (R1)
+src/lib/pi/PiCircuitBreaker.ts             CLOSED→OPEN→HALF_OPEN (3 fails → 60s)
+src/lib/flags.ts                           feature flags (NEXT_PUBLIC_FLAG_*) + useFlag
+src/lib/observability/logger.ts            structured JSON logger (log.info/warn/error) — no silent failures (C-96)
+src/lib/observability/reportError.ts       Sentry-ready error reporter (single swap-point)
 src/app/privacy/page.tsx · terms/page.tsx  Pi Portal legal pages
 src/styles/tec-design-tokens.css           import in app/layout.tsx
 .github/workflows/ci.yml                   payment-policy + CSRF guard + lint/typecheck/test/build
 ```
+
+**v2 (production-ready by default):** every new app ships
+- `/api/health` — uniform C-92 signal (platform health runtime + observability scrape + SLO/runtime-evidence loop);
+- structured `log` + `reportError` — use `log.error`/`reportError` in catch blocks (a silent error handler is an invisible failure, C-96; `reportError` is the one place to wire Sentry per app);
+- `PiRuntime` (PAL) + `PiCircuitBreaker` — never call `window.Pi.*` directly; go through PiRuntime so an SDK change is a one-file fix (R1) and flapping is contained;
+- `flags.ts` — feature flags from day one (`NEXT_PUBLIC_FLAG_<NAME>`);
+- coverage gate — `npm run test:coverage` (add devDep `@vitest/coverage-v8`; 60% floor, raise as the app grows).
 
 ---
 
