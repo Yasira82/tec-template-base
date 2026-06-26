@@ -13,7 +13,7 @@ export const getLastRequestId = (): string | null => {
 const getCsrfToken = (): string | null => {
   if (typeof document === 'undefined') return null;
   const match = document.cookie.match(/(?:^|;\s*)tec_csrf=([^;]+)/);
-  return match ? decodeURIComponent(match[1]) : null;
+  return match?.[1] ? decodeURIComponent(match[1]) : null;
 };
 
 export const buildHeaders = (

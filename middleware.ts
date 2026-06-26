@@ -26,7 +26,7 @@ function timingSafeStringEqual(a: string, b: string): boolean {
   const bBytes = new TextEncoder().encode(b);
   if (aBytes.length !== bBytes.length) return false;
   let diff = 0;
-  for (let i = 0; i < aBytes.length; i++) diff |= aBytes[i] ^ bBytes[i];
+  for (let i = 0; i < aBytes.length; i++) diff |= (aBytes[i] ?? 0) ^ (bBytes[i] ?? 0);
   return diff === 0;
 }
 
