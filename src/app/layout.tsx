@@ -23,6 +23,19 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               window.addEventListener('load', function() {
+                // ADR-007/C-12 §3: Hub-entered = Hub owns this Pi Browser
+                // session — never Pi.init() here (it poisons the session and
+                // breaks the Hub PaymentModal). The SSO landing persists the
+                // flag; referrer covers direct hops.
+                try {
+                  if (sessionStorage.getItem('__tec_hub_entry') === '1' ||
+                      document.referrer.toLowerCase().indexOf('hub.tecosystem.app') !== -1) {
+                    window.__TEC_PI_FOREIGN_SESSION = true;
+                    window.__TEC_PI_READY = true;
+                    window.dispatchEvent(new Event('tec-pi-ready'));
+                    return;
+                  }
+                } catch(e) {}
                 if (typeof window.Pi !== 'undefined') {
                   try {
                     window.Pi.init({
