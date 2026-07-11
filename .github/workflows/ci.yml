@@ -33,6 +33,15 @@ jobs:
             echo "::error::CSRF must be enforced ONLY in middleware (P2). Remove route-level CSRF checks — they 403 legit Pi-Browser payments. (KB C-12 §11)"
             violations=1
           fi
+          # Payment source: APP_SOURCE must be set (not the template default 'app') on a real app.
+          # An unset slug → payment recorded as source='app' → approve uses the default Pi key →
+          # Pi 404 payment_not_found in Mode-2 (the July 2026 System incident, KB C-12 §11).
+          if grep -q '"name": "tec-domain-template"' package.json; then
+            echo "app-source check skipped (this IS the template)"
+          elif grep -qE "APP_SOURCE = 'app'" src/lib/app-source.ts 2>/dev/null; then
+            echo "::error::Set APP_SOURCE in src/lib/app-source.ts to your app slug (still 'app'). Mode-2 approve will fail with Pi 404 + set PI_API_KEY_<SOURCE> on payment-service. (KB C-12 §11)"
+            violations=1
+          fi
           [ "$violations" -eq 0 ] && echo "payment contract policy OK" || exit 1
 
   lint:

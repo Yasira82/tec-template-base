@@ -96,7 +96,9 @@ src/styles/tec-design-tokens.css           import in app/layout.tsx
 □ package.json: set "name"
 □ middleware.ts: adjust PROTECTED_ROUTES
 □ sso-callback/route.ts: set ALLOWED_AUDIENCES + DEFAULT_REDIRECT to your domain
-□ src/lib/pi-payment.ts + payment/create: set APP_SOURCE slug
+□ src/lib/app-source.ts: set APP_SOURCE slug (ONE place — pi-payment.ts + payment/create
+   both import it, so they can't drift). Also set the matching PI_API_KEY_<SLUG> on
+   tec-payment-service — else Mode-2 approve fails with Pi 404 (KB C-12 §11). CI blocks 'app'.
 □ privacy/page.tsx + terms/page.tsx: set APP / DOMAIN / governing law / contacts
 □ Add ADR-007 isHubNavigation() guard to every buy handler
 □ .env: API_GATEWAY_URL · INTERNAL_SECRET · SSO_SECRET · NEXT_PUBLIC_PI_APP_ID · PI_SANDBOX=false (prod)

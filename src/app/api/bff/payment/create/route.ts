@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { APP_SOURCE } from '@/lib/app-source';
 
 // ── ADR-009 canonical payment contract — identical across all TEC apps ──
 //   gateway path:  ${GW}/api/payment/create  (gateway rewrites ^/api/payment → /payments)
@@ -8,9 +9,6 @@ import { z } from 'zod';
 // CSRF is enforced ONCE in middleware (double-submit OR first-party Origin).
 // ⚠️ DO NOT add a CSRF check here — it 403's legit Mode-2 payments in Pi Browser. (KB C-12 §11)
 const GW = process.env.API_GATEWAY_URL ?? '';
-
-// TODO(new app): set your app slug — tags the payment in tec-payment-service.
-const APP_SOURCE = 'app';
 
 const CreateSchema = z.object({
   amount:   z.coerce.number().positive(),
