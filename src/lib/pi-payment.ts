@@ -13,6 +13,8 @@
 //   if (!internalId) return;
 //   const result = await createU2APayment(amount, memo, { item_id: itemId }, internalId);
 
+import { APP_SOURCE } from './app-source';
+
 const getCsrfToken = (): string =>
   typeof document === 'undefined' ? '' :
   document.cookie.match(/(?:^|;\s*)tec_csrf=([^;]*)/)?.[1] ?? '';
@@ -28,9 +30,6 @@ export interface PaymentResult {
   txid?:      string;
   message?:   string;
 }
-
-// TODO(new app): set your app slug.
-const APP_SOURCE = 'app';
 
 // Resolve the Hub URL defensively: a misconfigured env (e.g. the literal
 // placeholder `C_HUB_URL`, or an empty string) must NEVER become the redirect
