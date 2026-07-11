@@ -100,6 +100,11 @@ src/styles/tec-design-tokens.css           import in app/layout.tsx
 □ privacy/page.tsx + terms/page.tsx: set APP / DOMAIN / governing law / contacts
 □ Add ADR-007 isHubNavigation() guard to every buy handler
 □ .env: API_GATEWAY_URL · INTERNAL_SECRET · SSO_SECRET · NEXT_PUBLIC_PI_APP_ID · PI_SANDBOX=false (prod)
+   ⚠️ NEXT_PUBLIC_HUB_URL / NEXT_PUBLIC_APP_URL must be REAL https URLs (or unset).
+      A placeholder like `C_HUB_URL` becomes the login + Mode-1 payment redirect
+      target → `C_HUB_URL/hub` → 404 (July 2026 System incident). NEXT_PUBLIC_* is
+      inlined at BUILD time — you MUST redeploy after changing it. The code now
+      ignores a non-http value and falls back, but keep the env clean anyway.
 □ Pi Developer Portal: register domain + App ID; set /privacy + /terms URLs
 □ Verify a real Pi payment Mode 1 (via Hub) AND Mode 2 (standalone)
 ```
@@ -114,6 +119,8 @@ src/styles/tec-design-tokens.css           import in app/layout.tsx
 - Do NOT store tokens in localStorage; do NOT derive identity from the body
 - Do NOT add `NEXT_PUBLIC_*` for internal service URLs or `INTERNAL_SECRET`
 - Do NOT use an open `redirect` param without the same-origin guard (open redirect)
+- Do NOT set `NEXT_PUBLIC_HUB_URL` / `NEXT_PUBLIC_APP_URL` to a non-URL placeholder
+  (e.g. `C_HUB_URL`) — it becomes the redirect target → 404. Real https URL or unset.
 
 ---
 
