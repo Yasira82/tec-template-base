@@ -76,6 +76,8 @@ src/lib/pi/PiCircuitBreaker.ts             CLOSED→OPEN→HALF_OPEN (3 fails �
 src/lib/flags.ts                           feature flags (NEXT_PUBLIC_FLAG_*) + useFlag
 src/lib/observability/logger.ts            structured JSON logger (log.info/warn/error) — no silent failures (C-96)
 src/lib/observability/reportError.ts       Sentry-ready error reporter (single swap-point)
+src/lib/subscription/pro-status.ts         CANONICAL Pro-status resolver (nested-envelope unwrap) — import, don't re-parse
+src/app/api/bff/subscription/route.ts      GET /api/bff/subscription → { pro, plan, isExpired, daysRemaining }
 src/app/privacy/page.tsx · terms/page.tsx  Pi Portal legal pages
 src/styles/tec-design-tokens.css           import in app/layout.tsx
 .github/workflows/ci.yml                   payment-policy + CSRF guard + lint/typecheck/test/build
@@ -86,6 +88,14 @@ src/styles/tec-design-tokens.css           import in app/layout.tsx
 - structured `log` + `reportError` — use `log.error`/`reportError` in catch blocks (a silent error handler is an invisible failure, C-96; `reportError` is the one place to wire Sentry per app);
 - `PiRuntime` (PAL) + `PiCircuitBreaker` — never call `window.Pi.*` directly; go through PiRuntime so an SDK change is a one-file fix (R1) and flapping is contained;
 - `flags.ts` — feature flags from day one (`NEXT_PUBLIC_FLAG_<NAME>`);
+- **Pro-status resolver** — gate any Pro feature with `resolveProStatus(token)` /
+  `resolveProState(token)` from `src/lib/subscription/pro-status.ts`. Subscription is
+  commerce-owned (C-47); this reads the LIVE status with the session token and unwraps
+  the **nested** envelope `{ data: { subscription: { plan, isActive, isExpired,
+  current_period_end, daysRemaining } } }` in ONE place. **Do NOT hand-roll another
+  parser** — a per-app copy that read `.data.plan` (flat) once locked Pro OFF for every
+  paying user across the fleet. `pro-status.test.ts` pins it against the real shape;
+  fails closed to FREE (P6). `daysRemaining`/`isExpired` drive a renewal reminder.
 - coverage gate — `npm run test:coverage` (add devDep `@vitest/coverage-v8`; 60% floor, raise as the app grows).
 
 ---
