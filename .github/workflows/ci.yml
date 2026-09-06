@@ -52,6 +52,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
+          cache: 'npm'
       - name: Install
         run: npm install --legacy-peer-deps
       - name: Lint
@@ -66,6 +67,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
+          cache: 'npm'
       - name: Install
         run: npm install --legacy-peer-deps
       - name: Typecheck
@@ -79,6 +81,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
+          cache: 'npm'
       - name: Install
         run: npm install --legacy-peer-deps
       - name: Test
@@ -93,6 +96,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
+          cache: 'npm'
       - name: Install
         run: npm install --legacy-peer-deps
       - name: Build
