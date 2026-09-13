@@ -117,6 +117,43 @@ src/styles/tec-design-tokens.css           import in app/layout.tsx
 
 ---
 
+## CI economics — every workflow here carries `concurrency`
+
+`ci.yml`, `e2e.yml` and `codeql.yml` each open with:
+
+```yaml
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+```
+
+**Keep it, and keep it in this exact spelling.** A new workflow added to an app
+without it makes every intermediate push on a PR branch pay for a full pipeline —
+five CI jobs, a CodeQL analysis, and a Playwright install-build-and-run — answering
+a question about a commit nobody will look at again.
+
+**`main` is deliberately excluded from cancellation.** A run there is the post-merge
+record and the status a deploy gate reads; cancelling it trades money for the one
+signal worth keeping. `cancel-in-progress: true` is the WRONG form — tec-app carried
+it and was killing its own main runs until September 2026.
+
+> **Why this section exists.** This rule was live in `tec-knowledge-base`'s
+> `knowledge-ci.yml` for months, and in a weaker variant in `tec-app`. **This
+> template did not have it — so all 23 apps cloned from it were born without it**,
+> and the platform paid for two years of superseded pipelines before anyone added up
+> the bill. A rule that lives in one repo and not in the template is a rule the fleet
+> does not have. Same shape as the `^1.1.0` caret trap (C-02 Session 46) and the
+> Dependabot config: learned once, never propagated.
+
+CodeQL here runs on `pull_request` + a weekly `schedule` and **not** on `push: main` —
+the PR run already analysed that exact code, and the weekly run keeps the Security-tab
+baseline (what ages and closes alerts) refreshing on the default branch.
+
+**Tag-triggered workflows (`release.yml`, any publish) must NOT get `concurrency`** —
+a release or an npm publish must never be cancellable mid-flight.
+
+---
+
 ## New app setup checklist
 
 ```
