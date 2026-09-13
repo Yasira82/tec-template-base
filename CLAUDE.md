@@ -70,6 +70,7 @@ src/app/api/auth/refresh/route.ts          token refresh
 src/app/api/bff/payment/{create,approve,complete,resolve-incomplete}/route.ts
 src/app/api/bff/items/route.ts             example domain route (copy this pattern)
 src/app/api/health/route.ts                health endpoint (C-92/C-96) — fail-safe, public, never 500s
+src/app/api/ready/route.ts                 readiness (C-92/C-96) — public, 503 when a dependency is unusable
 src/lib/pi-payment.ts                      createPaymentRecord + createU2APayment
 src/lib/pi/PiRuntime.ts                    PAL — single choke-point for window.Pi.* (R1)
 src/lib/pi/PiCircuitBreaker.ts             CLOSED→OPEN→HALF_OPEN (3 fails → 60s)
@@ -85,6 +86,22 @@ src/styles/tec-design-tokens.css           import in app/layout.tsx
 
 **v2 (production-ready by default):** every new app ships
 - `/api/health` — uniform C-92 signal (platform health runtime + observability scrape + SLO/runtime-evidence loop);
+- `/api/ready` — the counterpart, and **deliberately the opposite of health in one respect**:
+
+  ```
+  health  → "am I alive?"   — ALWAYS 200, never blocks a deploy
+  ready   → "can I serve?"  — 503 when a dependency I need is unusable
+  ```
+
+  One endpoint cannot be both. Health must never fail under load: during the
+  "Backend Offline" incident (NEW-W) a liveness check that failed while the gateway
+  was merely busy reported the platform down, and **the false alarm was the outage
+  people saw**. But an endpoint that always answers 200 can never gate a rollout or
+  take a broken instance out of rotation — so readiness is a second endpoint that
+  **is allowed, and required, to fail**. Unconfigured counts as not-ready (P6): an
+  app that does not know where its gateway is cannot serve a signed-in user, and
+  "no config" must never read as "fine". `tec-asset-service` has had this split
+  since the start; `ready-route.test.ts` pins it here.
 - structured `log` + `reportError` — use `log.error`/`reportError` in catch blocks (a silent error handler is an invisible failure, C-96; `reportError` is the one place to wire Sentry per app);
 - `PiRuntime` (PAL) + `PiCircuitBreaker` — never call `window.Pi.*` directly; go through PiRuntime so an SDK change is a one-file fix (R1) and flapping is contained;
 - `flags.ts` — feature flags from day one (`NEXT_PUBLIC_FLAG_<NAME>`);
