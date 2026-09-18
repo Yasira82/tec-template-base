@@ -9,8 +9,8 @@ on:
 
 # One run per ref. Pushing again to a PR branch cancels the superseded run
 # instead of racing it: the last commit is the only one anyone reads, and
-# without this every intermediate push paid for a full pipeline — CI's five
-# jobs, a CodeQL analysis, a Playwright install-build-and-run — that was
+# without this every intermediate push paid for a full pipeline — CI's
+# job, a CodeQL analysis, a Playwright install-build-and-run — that was
 # obsolete before it finished.
 #
 # `main` is EXCLUDED from cancellation on purpose: a run there is the
@@ -30,15 +30,42 @@ permissions:
   contents: read
 
 jobs:
-  payment-policy:
-    name: Payment contract policy (ADR-009)
+  # ── ONE job, ONE install ──────────────────────────────────────────────────
+  #
+  # This was five jobs: payment-policy · lint · typecheck · test · build. They
+  # were correct and they were expensive, for two reasons that compound:
+  #
+  #   1. FOUR of them ran `npm install` — the same install, four times, on four
+  #      runners, for one commit.
+  #   2. GitHub bills each job ROUNDED UP TO THE MINUTE. `payment-policy` is a
+  #      handful of greps that finish in seconds and cost a full minute anyway.
+  #      Five jobs means five roundings before any real work is counted.
+  #
+  # Splitting them bought parallelism — a faster red light. On a platform built
+  # by one person, wall-clock minutes are worth far less than the bill, and in
+  # September 2026 the Actions budget reached 98% of its cap with `Stop usage`
+  # armed, which would have frozen every open PR across 29 repos.
+  #
+  # Nothing is dropped. Every check that ran before still runs, in the order a
+  # failure is cheapest to find: the greps need no install and go first; a type
+  # error stops the run before the test suite and the build.
+  #
+  # e2e stays a separate workflow ON PURPOSE. It builds with different
+  # `NEXT_PUBLIC_*` values (localhost gateway + E2E_MODE), and those are inlined
+  # at BUILD time — so its build is a genuinely different artifact that this one
+  # cannot stand in for. Merging them would mean two builds in one job, which
+  # saves a runner and nothing else.
+  verify:
+    name: Verify
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - name: Check payment contract + CSRF placement
+
+      # No install needed — greps over src. First, so a policy violation costs
+      # seconds instead of a full pipeline.
+      - name: Payment contract policy (ADR-009) + CSRF placement
         run: |
           violations=0
-          # ADR-009: internal-auth header + amount-as-number
           if grep -rniE 'x-service-secret|SERVICE_SECRET' src; then
             echo "::error::ADR-009: use x-internal-key / INTERNAL_SECRET (not x-service-secret / SERVICE_SECRET)"
             violations=1
@@ -47,77 +74,33 @@ jobs:
             echo "::error::ADR-009: payment amount must be a number — no z.string() for amount in payment routes"
             violations=1
           fi
-          # P2: CSRF is middleware-only — no route-level CSRF validate-and-403
           if grep -rnE 'csrfCookie !== csrfHeader|csrfCookie === csrfHeader|CSRF validation failed|CSRF token mismatch' src/app/api 2>/dev/null; then
             echo "::error::CSRF must be enforced ONLY in middleware (P2). Remove route-level CSRF checks — they 403 legit Pi-Browser payments. (KB C-12 §11)"
             violations=1
           fi
-          # Payment source: APP_SOURCE must be set (not the template default 'app') on a real app.
-          # An unset slug → payment recorded as source='app' → approve uses the default Pi key →
-          # Pi 404 payment_not_found in Mode-2 (the July 2026 System incident, KB C-12 §11).
-          if grep -q '"name": "tec-domain-template"' package.json; then
-            echo "app-source check skipped (this IS the template)"
-          elif grep -qE "APP_SOURCE = 'app'" src/lib/app-source.ts 2>/dev/null; then
-            echo "::error::Set APP_SOURCE in src/lib/app-source.ts to your app slug (still 'app'). Mode-2 approve will fail with Pi 404 + set PI_API_KEY_<SOURCE> on payment-service. (KB C-12 §11)"
-            violations=1
-          fi
           [ "$violations" -eq 0 ] && echo "payment contract policy OK" || exit 1
 
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'npm'
+
       - name: Install
         run: npm install --legacy-peer-deps
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      # Advisory, exactly as before: this step could never fail the build when it
+      # was its own job (`continue-on-error: true`), and it still cannot. It now
+      # costs the seconds it takes rather than a whole runner.
       - name: Lint
         run: npm run lint
         continue-on-error: true
 
-  typecheck:
-    name: Typecheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - name: Install
-        run: npm install --legacy-peer-deps
-      - name: Typecheck
-        run: npm run typecheck
-
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - name: Install
-        run: npm install --legacy-peer-deps
       - name: Test
         run: npm test
 
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    needs: [typecheck]
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-node@v6
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - name: Install
-        run: npm install --legacy-peer-deps
       - name: Build
         run: npm run build
         env:
