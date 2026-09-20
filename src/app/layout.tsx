@@ -1,5 +1,6 @@
 import { PiWarmup }      from '@/components/pi/PiWarmup';
 import { ArrivalReport } from '@/components/pioneer/ArrivalReport';
+import { QuestReturn } from '@/components/pioneer/QuestReturn';
 import { HUB_HOSTS } from '@/lib/pi-network';
 import type { Metadata } from 'next';
 import '@/styles/tec-design-tokens.css';
@@ -123,7 +124,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body><PiWarmup /><ArrivalReport />{children}</body>
+      <body><PiWarmup /><ArrivalReport /><QuestReturn />{children}</body>
     </html>
   );
 }
