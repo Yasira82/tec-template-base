@@ -67,6 +67,8 @@ Identity is derived from the `tec_user` cookie server-side — **never from the 
 middleware.ts                              CSRF (double-submit OR Origin) + page guard
 src/app/api/auth/sso-callback/route.ts     Hub SSO landing (open-redirect-safe)
 src/app/api/auth/refresh/route.ts          token refresh
+src/app/api/auth/pi-login/route.ts         the app signs ITSELF in: Pi token → one-time token for its own sso-callback (C-123 §3)
+src/lib/pi/self-sign-in.ts                 standalone visit (Quest · campaign · Pi's app list) with no session → sign in once, never loop
 src/app/api/bff/payment/{create,approve,complete,resolve-incomplete}/route.ts
 src/app/api/bff/items/route.ts             example domain route (copy this pattern)
 src/app/api/health/route.ts                health endpoint (C-92/C-96) — fail-safe, public, never 500s
