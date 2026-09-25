@@ -73,7 +73,12 @@ export const redirectToHubPayment = (params: {
     pay:    '1',
     source: APP_SOURCE,
     amount: String(params.amount),
-    item:   params.itemId,
+    // `product_id` is the name the Hub's Mode-1 contract documents and reads; this
+    // template sent only `item`, so every app cloned from it reached payment-service
+    // with no product and commerce never activated the Pro it was paying for. The Hub
+    // now accepts both (tec-app #257); `item` stays for any Hub not yet redeployed.
+    product_id: params.itemId,
+    item:       params.itemId,
     // Where the Hub sends the user back — on Cancel AND on success. Omitting it
     // left the Hub defaulting to its OWN /hub, so cancelling a payment that
     // started here dropped the user on the Hub: they never left this app in
