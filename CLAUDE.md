@@ -115,6 +115,10 @@ src/styles/tec-design-tokens.css           import in app/layout.tsx
   parser** — a per-app copy that read `.data.plan` (flat) once locked Pro OFF for every
   paying user across the fleet. `pro-status.test.ts` pins it against the real shape;
   fails closed to FREE (P6). `daysRemaining`/`isExpired` drive a renewal reminder.
+  **It reads THIS app's Pro (`?app=<APP_SOURCE>`)** — each app's Pro is its own, the
+  Hub plan is separate (owner, 2026-10-02; tec-core-backend #356). Put
+  `<CancelProButton />` (`src/components/pro`) in your Pro card's "You're on Pro" state:
+  it cancels this app's Pro only (`POST /api/bff/subscription/cancel`).
 - coverage gate — `npm run test:coverage` (add devDep `@vitest/coverage-v8`; 60% floor, raise as the app grows).
 
 ---
