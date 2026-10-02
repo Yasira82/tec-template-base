@@ -53,6 +53,11 @@ describe('sso-callback with a token it cannot use', () => {
     expect(res.headers.get('set-cookie')).toContain('tec_access_token=');
   });
 
+  it('the landing records that this tab came through a signed handoff (read at the payment tap)', async () => {
+    const res = await land(await token());
+    expect(await res.text()).toContain("sessionStorage.setItem('__tec_handoff_entry', '1')");
+  });
+
   it('the SAME token a second time → the page, not replay_detected', async () => {
     const t = await token();
     expect((await land(t)).status).toBe(200);
