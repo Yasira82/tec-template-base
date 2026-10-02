@@ -20,6 +20,8 @@
 // not hand-roll another parser.
 // ─────────────────────────────────────────────────────────────────────────────
 
+import { APP_SOURCE } from '@/lib/app-source';
+
 const GW = process.env.API_GATEWAY_URL ?? '';
 
 const gwHeaders = (token: string) => ({
@@ -47,12 +49,13 @@ function unwrap(d: Record<string, unknown>): Record<string, unknown> {
   return ((root.subscription ?? root) ?? {}) as Record<string, unknown>;
 }
 
-// The caller's LIVE Pro entitlement + renewal signal. Any failure → FREE (fail
+// The caller's LIVE Pro entitlement IN THIS APP (`?app=` — each app's Pro is its
+// own, owner decision 2026-10-02; the Hub plan is separate) + renewal signal. Any failure → FREE (fail
 // closed, P6). Reads the session token; never trusts a client-sent plan.
 export async function resolveProState(token: string): Promise<ProState> {
   if (!GW || !token) return FREE;
   try {
-    const res = await fetch(`${GW}/api/commerce/subscriptions/status`, {
+    const res = await fetch(`${GW}/api/commerce/subscriptions/status?app=${encodeURIComponent(APP_SOURCE)}`, {
       headers: gwHeaders(token), cache: 'no-store',
     });
     if (!res.ok) return FREE;
