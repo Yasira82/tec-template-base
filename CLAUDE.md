@@ -118,7 +118,9 @@ src/styles/tec-design-tokens.css           import in app/layout.tsx
   **It reads THIS app's Pro (`?app=<APP_SOURCE>`)** — each app's Pro is its own, the
   Hub plan is separate (owner, 2026-10-02; tec-core-backend #356). Put
   `<CancelProButton />` (`src/components/pro`) in your Pro card's "You're on Pro" state:
-  it cancels this app's Pro only (`POST /api/bff/subscription/cancel`).
+  it cancels this app's Pro only (`POST /api/bff/subscription/cancel`). It hides for the
+  Founding gift (`legacy`, nothing of this app's to cancel) — except for an admin, who
+  may switch the gift off in one app to test it as FREE; Re-grant restores it.
 - coverage gate — `npm run test:coverage` (add devDep `@vitest/coverage-v8`; 60% floor, raise as the app grows).
 
 ---
