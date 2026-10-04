@@ -86,3 +86,25 @@ describe('resolveProState — commerce envelope contract', () => {
     expect(nested.data.subscription.plan).toBe('PRO');   // the contract
   });
 });
+
+describe('resolveProState — legacy / gift pass through as commerce says them', () => {
+  it('the Founding gift reads legacy + gift (no Cancel); an admin\'s gift reads legacy:false', async () => {
+    const end = new Date(Date.now() + 170 * 86_400_000).toISOString();
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+      ok({ data: { subscription: { plan: 'PRO', isActive: true, current_period_end: end, daysRemaining: 170, legacy: true, gift: true } } }),
+    );
+    const { resolveProState } = await import('@/lib/subscription/pro-status');
+    expect(await resolveProState('tok')).toMatchObject({ pro: true, legacy: true, gift: true });
+
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(
+      ok({ data: { subscription: { plan: 'PRO', isActive: true, current_period_end: end, legacy: false, gift: true } } }),
+    );
+    expect(await resolveProState('tok')).toMatchObject({ pro: true, legacy: false, gift: true });
+  });
+
+  it('a field commerce does not send is false, never guessed', async () => {
+    vi.spyOn(globalThis, 'fetch').mockResolvedValueOnce(ok({ data: { subscription: { plan: 'PRO', isActive: true } } }));
+    const { resolveProState } = await import('@/lib/subscription/pro-status');
+    expect(await resolveProState('tok')).toMatchObject({ legacy: false, gift: false });
+  });
+});
