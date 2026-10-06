@@ -1,5 +1,7 @@
 'use client';
 
+import { SignInGate } from '@/components/pi/SignInGate';
+
 // Example protected page demonstrating the canonical ADR-007 dual-mode buy flow.
 // Copy this handler into your real product/checkout components.
 import { useEffect, useState } from 'react';
@@ -14,7 +16,7 @@ import {
 // TODO(new app): replace with real items from your BFF (/api/bff/items).
 const DEMO_ITEM = { id: 'demo-1', name: 'Demo Item', price: 1 };
 
-export default function AppHomePage() {
+function AppHomePage() {
   const [piReady, setPiReady] = useState(false);
   const [status, setStatus]   = useState<string>('');
 
@@ -68,4 +70,11 @@ export default function AppHomePage() {
       </div>
     </main>
   );
+}
+
+// The door: a sign-in button before any screen when there is no session
+// (SignInGate — C-123 §10; owner, 2026-10-06). A visit from the Hub arrives
+// signed in (§12) and goes straight through.
+export default function AppHomePageGated() {
+  return <SignInGate><AppHomePage /></SignInGate>;
 }
