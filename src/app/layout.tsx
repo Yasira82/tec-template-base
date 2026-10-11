@@ -3,11 +3,16 @@ import { ArrivalReport } from '@/components/pioneer/ArrivalReport';
 import { QuestReturn } from '@/components/pioneer/QuestReturn';
 import { HUB_HOSTS } from '@/lib/pi-network';
 import type { Metadata } from 'next';
+import { APP_META } from '@/lib/app-meta';
 import '@/styles/tec-design-tokens.css';
 
+// Title, description and the share card (Open Graph) from ONE place — lib/app-meta.ts (E11).
 export const metadata: Metadata = {
-  title:       'TEC Domain',
-  description: 'TEC Ecosystem — Pi Network Super App',
+  title:       APP_META.name,
+  description: APP_META.description,
+  applicationName: APP_META.name,
+  openGraph: { title: APP_META.name, description: APP_META.description, siteName: APP_META.name, type: 'website' },
+  twitter:   { card: 'summary', title: APP_META.name, description: APP_META.description },
 };
 
 export default function RootLayout({
@@ -21,7 +26,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         {/* Full-bleed dark shell — tint the browser UI + declare dark canvas so
             no white frame shows around the app in Pi Browser. */}
-        <meta name="theme-color" content="#020205" />
+        <meta name="theme-color" content={APP_META.themeColor} />
         <meta name="color-scheme" content="dark" />
         {/* The Pi SDK is NOT loaded here. It is injected below, and ONLY when
             this is not a Hub-owned session — see the note in that script. */}
