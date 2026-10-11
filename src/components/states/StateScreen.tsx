@@ -4,16 +4,15 @@
 // with a way out, a page that does not exist, and a wait. Paints with the fleet's
 // design tokens only (E4) and in the person's language, right-to-left when it is.
 
-import { useEffect, useState, type ReactNode } from 'react';
-import { DICTIONARIES, pickLocale, dirOf } from '@/lib/i18n';
+import { type ReactNode } from 'react';
+import { useDict } from '@/lib/i18n';
 import type { Translations } from '@/lib/i18n/en';
 import type { LocaleCode } from '@/lib/locales';
 
-/** The person's dictionary — English on the server and the first paint, theirs after mount. */
+/** The person's `states` strings — English on the server and the first paint, theirs after mount. */
 export function useStateStrings(): { s: Translations['states']; dir: 'ltr' | 'rtl'; lang: LocaleCode } {
-  const [lang, setLang] = useState<LocaleCode>('en');
-  useEffect(() => { setLang(pickLocale()); }, []);
-  return { s: DICTIONARIES[lang].states, dir: dirOf(lang), lang };
+  const { t, dir, lang } = useDict();
+  return { s: t.states, dir, lang };
 }
 
 export function StateScreen({ icon, title, body, children, dir, lang }: {

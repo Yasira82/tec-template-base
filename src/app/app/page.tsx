@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { SignInGate } from '@/components/pi/SignInGate';
 
 // Example protected page demonstrating the canonical ADR-007 dual-mode buy flow.
@@ -53,7 +54,7 @@ function AppHomePage() {
   };
 
   return (
-    <main style={{ minHeight: '100vh', background: TEC_COLORS.bg, color: '#e7e7ea', padding: 32, fontFamily: 'system-ui, sans-serif' }}>
+    <main style={{ minHeight: '100vh', background: TEC_COLORS.bg, color: 'var(--tec-text-1)', padding: 32, fontFamily: 'system-ui, sans-serif' }}>
       <h1 style={{ color: TEC_COLORS.gold }}>TEC App</h1>
       <p style={{ opacity: 0.7 }}>Pi SDK: {piReady ? 'ready' : 'loading…'}</p>
 
@@ -62,12 +63,18 @@ function AppHomePage() {
         <p style={{ color: TEC_COLORS.gold }}>π {DEMO_ITEM.price}</p>
         <button
           onClick={handleBuy}
-          style={{ background: TEC_COLORS.goldDark, color: '#020205', border: 'none', borderRadius: 8, padding: '10px 18px', fontWeight: 700, cursor: 'pointer' }}
+          style={{ background: TEC_COLORS.goldDark, color: 'var(--tec-bg)', border: 'none', borderRadius: 8, padding: '10px 18px', fontWeight: 700, cursor: 'pointer' }}
         >
           Buy with Pi
         </button>
         {status && <p style={{ marginTop: 12 }}>{status}</p>}
       </div>
+      {/* Help & feedback, one tap from home (App Excellence Standard E12). */}
+      <p style={{ marginTop: 24 }}>
+        <Link href="/help" style={{ color: 'var(--tec-text-2)', fontSize: 14, minHeight: 40, display: 'inline-block', lineHeight: '40px' }}>
+          Help &amp; feedback
+        </Link>
+      </p>
     </main>
   );
 }

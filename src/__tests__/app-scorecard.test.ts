@@ -14,10 +14,11 @@ describe('the App Excellence scorecard', () => {
     expect(r.regressed).toEqual([]);
   });
 
-  it('the template passes the screens, the twelve languages and the manifest (S1)', () => {
+  it('the template passes EVERY check — a new app starts at 100 %', () => {
+    const all = ['E1', 'E3', 'E4', 'E5', 'E6', 'E7', 'E8', 'E9', 'E10', 'E11', 'E12', 'E13', 'E14'];
     const floor = JSON.parse(readFileSync('.app-scorecard.json', 'utf8')).required as string[];
-    for (const id of ['E1', 'E3', 'E11']) expect(floor).toContain(id);
-    const byId = Object.fromEntries(run().results.map((x: { id: string; pass: boolean }) => [x.id, x.pass]));
-    expect(byId.E1 && byId.E3 && byId.E11).toBe(true);
+    expect([...floor].sort()).toEqual([...all].sort());
+    const failing = run().results.filter((x: { pass: boolean }) => !x.pass).map((x: { id: string }) => x.id);
+    expect(failing).toEqual([]);
   });
 });

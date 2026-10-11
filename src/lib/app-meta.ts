@@ -9,6 +9,6 @@ export const APP_META = {
   name:        'TEC Domain',
   shortName:   'TEC',
   description: 'TEC Ecosystem — Pi Network Super App',
-  /** The page background (design token `--tec-bg`) — also the browser chrome and splash colour. */
-  themeColor:  '#020205',
+  /** The page background — the value of the design token `--tec-bg` (C-83 layer 1); also the browser chrome and splash colour. */
+  themeColor:  '#050816',
 } as const;

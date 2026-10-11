@@ -44,6 +44,17 @@ export function pickLocale(): LocaleCode {
 
 export const dirOf = (code: LocaleCode): 'ltr' | 'rtl' => localeInfo(code).dir;
 
+/**
+ * The person's dictionary WITHOUT the provider — for screens that render outside it
+ * (error, not found, help). English on the server and the first paint, theirs after
+ * mount, so the server and the first client render agree.
+ */
+export function useDict(): { t: Translations; lang: LocaleCode; dir: 'ltr' | 'rtl' } {
+  const [lang, setLang] = useState<LocaleCode>('en');
+  useEffect(() => { setLang(pickLocale()); }, []);
+  return { t: DICTIONARIES[lang], lang, dir: dirOf(lang) };
+}
+
 interface LocaleContextValue {
   locale:    LocaleCode;
   setLocale: (locale: LocaleCode) => void;

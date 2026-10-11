@@ -32,6 +32,33 @@ export const en = {
     notFoundBody:  "This page does not exist or was moved.",
     loadingLabel:  "Loading",
   },
+  // Help & feedback (App Excellence Standard E12).
+  help: {
+    title:   "Help & feedback",
+    intro:   "Answers to the common questions — and a way to tell us anything else.",
+    q1:      "How do I sign in?",
+    a1:      "Tap “Sign in with Pi”. Inside the Pi Browser your Pi account signs you in; nothing else is needed.",
+    q2:      "How do payments work?",
+    a2:      "Every payment is approved by you in your Pi wallet. TEC never moves Pi without that approval.",
+    q3:      "Who sees my data?",
+    a3:      "Only you, and only what you choose to share. The privacy policy below says exactly what is kept.",
+    privacy: "Privacy",
+    terms:   "Terms",
+    back:    "Back to the app",
+  },
+  feedback: {
+    title:       "Tell us what you think",
+    placeholder: "What worked, what did not, what you wish this app did…",
+    send:        "Send",
+    sending:     "Sending…",
+    thanks:      "Thank you — your message arrived.",
+    thanksHint:  "The team reads every message. If it needs an answer, you will hear back inside TEC.",
+    sendAnother: "Send another",
+    tooShort:    "Write a few words first.",
+    tooLong:     "{n} characters — please keep it under 2000.",
+    failed:      "It could not be sent. Try again in a moment.",
+    privacyNote: "Sent with your Pi username and the page you are on — nothing else.",
+  },
 };
 
 /** The shape every locale must have — the same keys, in all twelve. */

@@ -40,7 +40,7 @@ export default function HomePage() {
   return (
     <div style={{
       minHeight:      '100vh',
-      background:     '#020205',
+      background:     'var(--tec-bg)',
       display:        'flex',
       alignItems:     'center',
       justifyContent: 'center',
@@ -61,7 +61,7 @@ export default function HomePage() {
             background:   `linear-gradient(135deg, ${TEC_COLORS.gold}, ${TEC_COLORS.goldDark})`,
             border:       'none',
             borderRadius: 16,
-            color:        '#0a0800',
+            color:        'var(--tec-bg)',
             fontSize:     15,
             fontWeight:   700,
             cursor:       isLoading ? 'not-allowed' : 'pointer',
