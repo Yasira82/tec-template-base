@@ -134,7 +134,10 @@ if (args.has('--after-build')) {
 }
 
 const results = checks.map(([id, title, fn]) => { const [pass, detail] = fn(); return { id, title, pass: !!pass, detail: pass ? '' : detail }; });
-const floor = existsSync(FLOOR_FILE) ? JSON.parse(readFileSync(FLOOR_FILE, 'utf8')).required ?? [] : [];
+// Read, never "check then read": no existsSync before the read or the write (CodeQL
+// js/file-system-race). A missing floor file reads as an empty floor.
+const floorText = read('.app-scorecard.json');
+const floor = floorText ? JSON.parse(floorText).required ?? [] : [];
 const passing = results.filter((r) => r.pass).map((r) => r.id);
 const regressed = floor.filter((id) => results.some((r) => r.id === id && !r.pass));
 const gained = passing.filter((id) => !floor.includes(id) && id !== 'E15');
