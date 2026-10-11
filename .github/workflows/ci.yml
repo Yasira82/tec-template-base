@@ -80,6 +80,12 @@ jobs:
           fi
           [ "$violations" -eq 0 ] && echo "payment contract policy OK" || exit 1
 
+      # App Excellence Standard (KB audits/APP_EXPANSION_ARCHITECTURE_2026-10-11.md §2).
+      # Plain Node, no install: prints the score and fails only when a check this app
+      # has already passed (`.app-scorecard.json`) stops passing — a ratchet.
+      - name: App Excellence scorecard
+        run: node scripts/app-scorecard.mjs
+
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
@@ -109,6 +115,10 @@ jobs:
           NEXT_PUBLIC_PI_APP_ID:       ${{ secrets.NEXT_PUBLIC_PI_APP_ID || 'test-app-id' }}
       # C-123 §11: a middleware Next.js does not load passes every unit test and
       # runs nowhere. The build's own manifest is the proof that it runs.
+      # E15 needs the build: /app first-load JS against the budget. Reported, not yet
+      # in the floor — the first reading is the baseline.
+      - name: App Excellence — performance budget
+        run: node scripts/app-scorecard.mjs --after-build
       - name: Middleware is compiled
         run: |
           node -e "const m=require('./.next/server/middleware-manifest.json').middleware; if(!m['/']){console.error('::error::middleware not compiled — it must live in src/ beside src/app (C-123 §11)');process.exit(1)} console.log('middleware compiled')"

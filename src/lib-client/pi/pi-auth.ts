@@ -146,7 +146,7 @@ const _captureError = (message: string, data: Record<string, unknown>): void => 
         tags:  { component: 'pi-auth', type: 'incomplete-payment' },
       });
     }).catch(() => {});
-  } catch {}
+  } catch { /* ignore — a reporter must never throw: Sentry absent or blocked here */ }
 };
 
 const _reportResolved = (piPaymentId: string, via: string, action?: unknown): void => {
@@ -159,7 +159,7 @@ const _reportResolved = (piPaymentId: string, via: string, action?: unknown): vo
         data:     { piPaymentId, via, action },
       });
     }).catch(() => {});
-  } catch {}
+  } catch { /* ignore — a reporter must never throw: Sentry absent or blocked here */ }
 };
 
 const _addBreadcrumb = (message: string, data: Record<string, unknown>): void => {
@@ -172,7 +172,7 @@ const _addBreadcrumb = (message: string, data: Record<string, unknown>): void =>
         data,
       });
     }).catch(() => {});
-  } catch {}
+  } catch { /* ignore — a reporter must never throw: Sentry absent or blocked here */ }
 };
 
 // ── Helper — قراءة CSRF token من الـ cookie ───────────────

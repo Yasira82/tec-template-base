@@ -70,13 +70,13 @@ export function CancelProButton({ onCancelled }: { onCancelled?: () => void } = 
         disabled={busy}
         style={{
           padding: '8px 14px', borderRadius: 10, cursor: busy ? 'default' : 'pointer',
-          background: 'transparent', border: '1px solid rgba(239,68,68,0.55)', color: '#ef4444',
+          background: 'transparent', border: '1px solid rgba(239,68,68,0.55)', color: 'var(--tec-red)',
           fontSize: 12, fontWeight: 700,
         }}
       >
         {busy ? 'Cancelling…' : 'Cancel subscription'}
       </button>
-      {error && <div role="alert" style={{ fontSize: 11, color: '#ef4444', marginTop: 6 }}>{error}</div>}
+      {error && <div role="alert" style={{ fontSize: 11, color: 'var(--tec-red)', marginTop: 6 }}>{error}</div>}
     </div>
   );
 }
