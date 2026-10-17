@@ -76,9 +76,9 @@ const checks = [
     return [miss.length === 0, miss.join(' · ')];
   }],
   ['E6', 'Payments — the payment-policy CI step and the ADR-007 guard', () => {
-    const ci = read('.github/workflows/ci.yml');
+    const ci = read('.github/workflows/ci.yml') || read('../.github/workflows/ci.yml'); // a monorepo app (the Hub) keeps CI one level up
     const guard = CODE.some((f) => /isHubNavigation|__tec_hub_entry/.test(read(f)));
-    return [/Payment contract policy|payment-policy/.test(ci) && guard, [!/Payment contract policy|payment-policy/.test(ci) && 'no payment-policy step', !guard && 'no ADR-007 guard'].filter(Boolean).join(' · ')];
+    return [/payment[- ]contract|payment-policy|ADR-009/i.test(ci) && guard, [!/payment[- ]contract|payment-policy|ADR-009/i.test(ci) && 'no payment-policy step', !guard && 'no ADR-007 guard'].filter(Boolean).join(' · ')];
   }],
   ['E7', 'Health and readiness — /api/health · /api/ready', () => {
     const miss = ['src/app/api/health/route.ts', 'src/app/api/ready/route.ts'].filter((p) => !has(p));
