@@ -104,7 +104,10 @@
   "dependencies": [
     "next",
     "react",
-    "react-dom"
+    "react-dom",
+    "@yasser172/tec-auth",
+    "@yasser172/tec-sdk",
+    "@yasser172/tec-ui"
   ],
   "untracked": {
     "Tec-App": "The Hub: its own codebase (tec-frontend/), not made from this template",
