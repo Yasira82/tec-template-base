@@ -1,0 +1,63 @@
+name: Fleet drift
+
+# Which apps made from this template are behind it — checked against
+# template-sync.json, on every app in the KB's fleet list (architecture/app-fleet.yaml).
+#
+# Why: on 11 Nov 2026 a fleet fix reached 16 apps by hand and missed NBF and
+# Brookfield, which turned out to have missed weeks of changes — the Pi sign-in door
+# among them. Nothing said so. This run keeps ONE open issue (label `fleet-drift`)
+# listing what has not arrived where, and closes it when every app matches.
+#
+# Runs after every merge here (a fix that has not reached the apps shows at once),
+# every Monday (an app that changed on its own shows within a week), and by hand.
+# This repository is public: Actions minutes here cost nothing.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+
+# The fleet's one spelling of this rule (see ci.yml). Not cancelled on main.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  drift:
+    name: Fleet drift
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '20'
+
+      # The apps are public: cloned without a token. A clone that fails is reported
+      # as a problem for that app, never skipped.
+      - name: Check every app against the template
+        run: node scripts/template-sync.mjs fleet --workdir "$RUNNER_TEMP/fleet" --out "$RUNNER_TEMP/fleet-drift.md"
+
+      - name: Keep one issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPORT: ${{ runner.temp }}/fleet-drift.md
+        run: |
+          gh label create fleet-drift --color FBB44A --description "Apps behind the template (fleet-drift.yml)" 2>/dev/null || true
+          open=$(gh issue list --label fleet-drift --state open --json number --jq '.[0].number // empty')
+          if [ "$(cat "$REPORT.count")" = "0" ]; then
+            if [ -n "$open" ]; then gh issue close "$open" --comment "Every app matches the template — closed by fleet-drift.yml."; fi
+            echo "Every app matches the template." >> "$GITHUB_STEP_SUMMARY"
+          elif [ -n "$open" ]; then
+            gh issue edit "$open" --body-file "$REPORT"
+          else
+            gh issue create --title "Fleet drift: apps behind the template" --label fleet-drift --body-file "$REPORT"
+          fi
+          cat "$REPORT" >> "$GITHUB_STEP_SUMMARY"
