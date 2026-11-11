@@ -22,6 +22,12 @@ describe('template-sync.json', () => {
     expect(manifest.shared.filter((f: string) => !existsSync(join(ROOT, f)))).toEqual([]);
   });
 
+  it('every fleet file exists under fleet/, and none shadows a shared file', () => {
+    expect(manifest.fleet.length).toBeGreaterThan(5);
+    expect(manifest.fleet.filter((f: string) => !existsSync(join(ROOT, 'fleet', f)))).toEqual([]);
+    expect(manifest.fleet.filter((f: string) => manifest.shared.includes(f))).toEqual([]);
+  });
+
   it('every marker is present in the template itself', () => {
     for (const [file, needles] of Object.entries(manifest.markers) as [string, string[]][]) {
       const text = readFileSync(join(ROOT, file), 'utf8');
@@ -47,6 +53,7 @@ describe('checkApp / applyApp', () => {
     for (const f of [...manifest.shared, ...Object.keys(manifest.markers), 'package.json']) {
       cpSync(join(ROOT, f), join(app, f), { recursive: true });
     }
+    for (const f of manifest.fleet) cpSync(join(ROOT, 'fleet', f), join(app, f), { recursive: true });
   });
   afterAll(() => rmSync(app, { recursive: true, force: true }));
 
@@ -81,8 +88,11 @@ describe('checkApp / applyApp', () => {
   });
 
   it('apply restores the shared files and leaves markers and versions to a person', () => {
+    const fleetFile = manifest.fleet[0];
+    unlinkSync(join(app, fleetFile));
     const { copied, left } = sync.applyApp({ appDir: app, repo: 'Tec-Example' });
-    expect(copied).toEqual(expect.arrayContaining([manifest.shared[0], manifest.shared[1]]));
+    expect(copied).toEqual(expect.arrayContaining([manifest.shared[0], manifest.shared[1], fleetFile]));
+    expect(readFileSync(join(app, fleetFile))).toEqual(readFileSync(join(ROOT, 'fleet', fleetFile)));
     expect(left.map((p: { kind: string }) => p.kind).sort()).toEqual(['dependency', 'marker']);
   });
 });

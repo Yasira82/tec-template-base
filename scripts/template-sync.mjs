@@ -10,6 +10,10 @@
  *
  * What must match is written down ONCE, in `template-sync.json`:
  *   shared        files every app carries byte for byte
+ *   fleet         files kept under `fleet/` here and carried by every app at the same path
+ *                 without the prefix — for apps that cannot take the template's own version
+ *                 yet (the state and help screens read the template's 12-language
+ *                 dictionary; the apps have en/ar of their own)
  *   markers       fixes inside files each app customises (the text must be there)
  *   dependencies  versions that must equal the template's (next, react, …)
  *   untracked     fleet apps not made from this template, each with its reason
@@ -58,6 +62,14 @@ export function checkApp({ templateDir = TEMPLATE_DIR, appDir, repo = '', manife
     else if (!have.equals(want)) problems.push({ kind: 'differs', file });
   }
 
+  for (const file of manifest.fleet ?? []) {
+    if (skip[file]) continue;
+    const want = readFileSync(join(templateDir, 'fleet', file));
+    const have = readOrNull(join(appDir, file));
+    if (have === null) problems.push({ kind: 'missing', file });
+    else if (!have.equals(want)) problems.push({ kind: 'differs', file });
+  }
+
   for (const [file, needles] of Object.entries(manifest.markers ?? {})) {
     if (skip[file]) continue;
     const have = readOrNull(join(appDir, file));
@@ -81,11 +93,13 @@ export function checkApp({ templateDir = TEMPLATE_DIR, appDir, repo = '', manife
 export function applyApp({ templateDir = TEMPLATE_DIR, appDir, repo = '', manifest = loadManifest(templateDir) }) {
   const copied = [];
   for (const p of checkApp({ templateDir, appDir, repo, manifest })) {
-    if ((p.kind === 'missing' || p.kind === 'differs') && manifest.shared.includes(p.file)) {
-      mkdirSync(dirname(join(appDir, p.file)), { recursive: true });
-      copyFileSync(join(templateDir, p.file), join(appDir, p.file));
-      copied.push(p.file);
-    }
+    if (p.kind !== 'missing' && p.kind !== 'differs') continue;
+    const from = manifest.shared.includes(p.file) ? p.file
+      : (manifest.fleet ?? []).includes(p.file) ? join('fleet', p.file) : null;
+    if (!from) continue;
+    mkdirSync(dirname(join(appDir, p.file)), { recursive: true });
+    copyFileSync(join(templateDir, from), join(appDir, p.file));
+    copied.push(p.file);
   }
   return { copied, left: checkApp({ templateDir, appDir, repo, manifest }) };
 }
@@ -109,7 +123,7 @@ export function renderReport(results, manifest) {
   const lines = [
     '# Fleet drift — apps behind the template',
     '',
-    `Checked by \`scripts/template-sync.mjs fleet\` against \`template-sync.json\` (${manifest.shared.length} shared files, ` +
+    `Checked by \`scripts/template-sync.mjs fleet\` against \`template-sync.json\` (${manifest.shared.length} shared files, ${(manifest.fleet ?? []).length} fleet files, ` +
       `${Object.keys(manifest.markers ?? {}).length} files with markers, ${(manifest.dependencies ?? []).length} pinned versions).`,
     '',
     drifted.length

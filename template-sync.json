@@ -9,7 +9,18 @@
     "it is added to the fleet, which is what NBF and Brookfield missed (11 Nov 2026)."
   ],
   "owner": "Yasira82",
-  "fleet": "https://raw.githubusercontent.com/Yasira82/tec-knowledge-base/main/architecture/app-fleet.yaml",
+  "fleet": [
+    "src/components/fleet/strings.ts",
+    "src/components/fleet/StateScreen.tsx",
+    "src/components/fleet/FeedbackCard.tsx",
+    "src/app/error.tsx",
+    "src/app/not-found.tsx",
+    "src/app/loading.tsx",
+    "src/app/help/page.tsx",
+    "src/app/api/bff/feedback/route.ts",
+    "src/__tests__/fleet-screens.test.tsx",
+    "src/app/manifest.ts"
+  ],
   "shared": [
     ".claude/settings.json",
     ".github/dependabot.yml",
@@ -19,6 +30,7 @@
     ".gitignore",
     "Dockerfile",
     "LICENSE",
+    "e2e/pi-browser.spec.ts",
     "scripts/app-scorecard.mjs",
     "src/__tests__/arrival-after-pi-signin.test.tsx",
     "src/__tests__/arrival-diagnostic-reason.test.ts",
@@ -89,7 +101,8 @@
       "writeTrace(SIGNIN_TRACE"
     ],
     "src/app/layout.tsx": [
-      "SAFE_BOTTOM_BOOT_SCRIPT"
+      "SAFE_BOTTOM_BOOT_SCRIPT",
+      "openGraph"
     ],
     "src/app/app/page.tsx": [
       "SignInGate"
@@ -99,6 +112,12 @@
     ],
     "src/app/pi-test/page.tsx": [
       "ArrivalTracePanel"
+    ],
+    "playwright.config.ts": [
+      "PiBrowser"
+    ],
+    "eslint.config.mjs": [
+      "jsx-a11y"
     ]
   },
   "dependencies": [
