@@ -142,8 +142,8 @@ files (byte for byte), **markers** (a fix inside a file each app customises), pi
 
 **Changing a shared file here is half the change.** The other half is the apps; the issue says
 which. A fix made first in an app belongs here too — Round 3's ArrivalReport (re-send after ten
-minutes, `/pi-test` trace) is in Life and Zone and not yet here, which is why they carry an
-exception for it. Why this exists: 11 Nov 2026, a fix went to 16 apps by hand and NBF and
+minutes, the `/pi-test` trace) lived in Life and Zone only until 11 Nov 2026; it is here now.
+Why this exists: 11 Nov 2026, a fix went to 16 apps by hand and NBF and
 Brookfield — weeks behind, the sign-in door included — were missed, with nothing to say so.
 
 ---
