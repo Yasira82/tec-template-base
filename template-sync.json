@@ -89,6 +89,9 @@
     ],
     "src/app/app/page.tsx": [
       "SignInGate"
+    ],
+    "vitest.config.ts": [
+      "jsx: 'automatic'"
     ]
   },
   "dependencies": [
