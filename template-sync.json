@@ -1,0 +1,164 @@
+{
+  "$comment": [
+    "The files every app made from this template must carry byte for byte, and the fixes that",
+    "live inside files each app customises. scripts/template-sync.mjs reads it: `check` says",
+    "where an app has drifted, `apply` copies the shared files in. .github/workflows/fleet-drift.yml",
+    "runs `check` on every app in the KB's architecture/app-fleet.yaml each Monday and after every",
+    "merge here, and keeps one issue (label fleet-drift) listing what has not arrived.",
+    "An app in the fleet that is not under `untracked` is checked — a new app is covered the day",
+    "it is added to the fleet, which is what NBF and Brookfield missed (11 Nov 2026)."
+  ],
+  "owner": "Yasira82",
+  "fleet": [
+    "src/components/fleet/strings.ts",
+    "src/components/fleet/StateScreen.tsx",
+    "src/components/fleet/FeedbackCard.tsx",
+    "src/app/error.tsx",
+    "src/app/not-found.tsx",
+    "src/app/loading.tsx",
+    "src/app/help/page.tsx",
+    "src/app/api/bff/feedback/route.ts",
+    "src/__tests__/fleet-screens.test.tsx",
+    "src/app/manifest.ts"
+  ],
+  "shared": [
+    ".claude/settings.json",
+    ".github/dependabot.yml",
+    ".github/workflows/codeql.yml",
+    ".github/workflows/e2e.yml",
+    ".github/workflows/release.yml",
+    ".gitignore",
+    "Dockerfile",
+    "LICENSE",
+    "e2e/pi-browser.spec.ts",
+    "scripts/app-scorecard.mjs",
+    "src/__tests__/arrival-after-pi-signin.test.tsx",
+    "src/__tests__/arrival-diagnostic-reason.test.ts",
+    "src/__tests__/arrival-report.test.ts",
+    "src/__tests__/arrival-trace.test.tsx",
+    "src/__tests__/bff-payment-handlers.test.ts",
+    "src/__tests__/counted-once-warmup.test.tsx",
+    "src/__tests__/health-route.test.ts",
+    "src/__tests__/middleware-location.test.ts",
+    "src/__tests__/pal-and-flags.test.ts",
+    "src/__tests__/pi-session-counted.test.ts",
+    "src/__tests__/pi-session-fresh.test.ts",
+    "src/__tests__/ready-route.test.ts",
+    "src/__tests__/refresh-renews-session.test.ts",
+    "src/__tests__/safe-bottom.test.ts",
+    "src/__tests__/self-sign-in.test.ts",
+    "src/__tests__/session-cookies-partitioned.test.ts",
+    "src/__tests__/session-cookies-renewal.test.ts",
+    "src/__tests__/sign-in-gate.test.tsx",
+    "src/__tests__/sso-cookie-domain.test.ts",
+    "src/__tests__/sso-user-cookie.test.ts",
+    "src/app/api/auth/logout/route.ts",
+    "src/app/api/auth/pi-login/route.ts",
+    "src/app/api/auth/refresh/route.ts",
+    "src/app/api/bff/items/route.ts",
+    "src/app/api/bff/payment/approve/route.ts",
+    "src/app/api/bff/payment/complete/route.ts",
+    "src/app/api/bff/payment/resolve-incomplete/route.ts",
+    "src/app/api/bff/pioneer/arrived/route.ts",
+    "src/app/api/bff/subscription/cancel/route.ts",
+    "src/app/api/health/route.ts",
+    "src/app/api/ready/route.ts",
+    "src/app/pi-test/ArrivalTracePanel.tsx",
+    "src/components/pi/PiWarmup.tsx",
+    "src/components/pi/SignInGate.tsx",
+    "src/components/pioneer/ArrivalReport.tsx",
+    "src/components/pioneer/QuestReturn.tsx",
+    "src/lib-client/hooks/usePiAuth.ts",
+    "src/lib/bff/createHandler.ts",
+    "src/lib/cookie-domain.ts",
+    "src/lib/flags.ts",
+    "src/lib/observability/logger.ts",
+    "src/lib/observability/reportError.ts",
+    "src/lib/pi-network.ts",
+    "src/lib/pi/PiCircuitBreaker.ts",
+    "src/lib/pi/PiRuntime.ts",
+    "src/lib/pi/counted-once.ts",
+    "src/lib/pi/self-sign-in.ts",
+    "src/lib/pioneer/arrival-trace.ts",
+    "src/lib/request-id.ts",
+    "src/lib/safe-bottom.ts",
+    "src/lib/sdk.ts",
+    "src/lib/server/e2e-mode.ts",
+    "src/lib/server/fetch-with-timeout.ts",
+    "src/types/pi.types.ts",
+    "tsconfig.json",
+    "types/assets.d.ts"
+  ],
+  "markers": {
+    "src/lib/pi-payment.ts": [
+      "HUB_FALLBACK",
+      "product_id: params.itemId",
+      "PI_WALLET_DID_NOT_OPEN"
+    ],
+    "src/lib/pi/pi-session.ts": [
+      "piUser",
+      "announceCountedVisit",
+      "writeTrace(SIGNIN_TRACE"
+    ],
+    "src/app/layout.tsx": [
+      "SAFE_BOTTOM_BOOT_SCRIPT",
+      "openGraph"
+    ],
+    "src/app/app/page.tsx": [
+      "SignInGate"
+    ],
+    "vitest.config.ts": [
+      "jsx: 'automatic'"
+    ],
+    "src/app/pi-test/page.tsx": [
+      "ArrivalTracePanel"
+    ],
+    "playwright.config.ts": [
+      "PiBrowser"
+    ],
+    "eslint.config.mjs": [
+      "jsx-a11y"
+    ]
+  },
+  "dependencies": [
+    "next",
+    "react",
+    "react-dom",
+    "@yasser172/tec-auth",
+    "@yasser172/tec-sdk",
+    "@yasser172/tec-ui"
+  ],
+  "untracked": {
+    "Tec-App": "The Hub: its own codebase (tec-frontend/), not made from this template",
+    "Tec-Commerce": "Older than the template; shares few of its files",
+    "Tec-Assets": "Older than the template; shares few of its files",
+    "Tec-Ecommerce": "Older than the template; a public shop with no /app door"
+  },
+  "exceptions": {
+    "Tec-Life": {
+      "src/lib-client/hooks/usePiAuth.ts": "Life does not carry this hook",
+      "src/__tests__/session-cookies-renewal.test.ts": "Life has no logout route, so the logout half of this test is removed",
+      ".gitignore": "Also ignores vitest's coverage/ output",
+      "src/components/pi/SignInGate.tsx": "Life's gate is src/app/app/components/SignInGate.tsx, translated through Life's i18n",
+      "src/__tests__/sign-in-gate.test.tsx": "Follows Life's own gate",
+      "src/app/api/auth/logout/route.ts": "Life has no logout route",
+      "src/lib/sdk.ts": "Life does not use the client sdk",
+      "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)"
+    },
+    "Tec-Connection": {
+      "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)"
+    },
+    "Tec-Explorer": {
+      "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)"
+    },
+    "Tec-Zone": {
+      "src/app/pi-test/ArrivalTracePanel.tsx": "Zone's panel writes its colours as literals; same panel otherwise"
+    },
+    "Tec-system": {
+      "src/app/api/bff/subscription/cancel/route.ts": "System sells no Pro — its one payment is a voluntary contribution, so there is nothing to cancel"
+    },
+    "Tec-Nbf": {
+      "src/__tests__/sso-user-cookie.test.ts": "NBF's ALLOWED_AUDIENCES opens with a comment; its test reads past it to the first https origin"
+    }
+  }
+}

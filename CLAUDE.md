@@ -126,6 +126,28 @@ src/styles/tec-design-tokens.css           import in app/layout.tsx
 
 ---
 
+## A fix here must reach the apps — `template-sync.json`
+
+`template-sync.json` lists what every app made from this template must carry: **shared**
+files (byte for byte), **markers** (a fix inside a file each app customises), pinned
+**dependencies**, the fleet apps that are **untracked** (not made from here), and per-app
+**exceptions** — each with its reason.
+
+- `node scripts/template-sync.mjs check <app-dir> --repo <Repo>` — what that app lacks.
+- `node scripts/template-sync.mjs apply <app-dir> --repo <Repo>` — copies the shared files in and
+  prints what is left for a person (markers, versions). Then the app's tests, then one PR.
+- `.github/workflows/fleet-drift.yml` runs `fleet` after every merge here and every Monday on
+  every app in the KB's `architecture/app-fleet.yaml`, and keeps ONE issue (label `fleet-drift`).
+  An app not under `untracked` is checked — a new app is covered the day it joins the fleet.
+
+**Changing a shared file here is half the change.** The other half is the apps; the issue says
+which. A fix made first in an app belongs here too — Round 3's ArrivalReport (re-send after ten
+minutes, the `/pi-test` trace) lived in Life and Zone only until 11 Nov 2026; it is here now.
+Why this exists: 11 Nov 2026, a fix went to 16 apps by hand and NBF and
+Brookfield — weeks behind, the sign-in door included — were missed, with nothing to say so.
+
+---
+
 ## CI economics — every workflow here carries `concurrency`
 
 `ci.yml`, `e2e.yml` and `codeql.yml` each open with:
