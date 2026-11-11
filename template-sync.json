@@ -130,6 +130,9 @@
     },
     "Tec-system": {
       "src/app/api/bff/subscription/cancel/route.ts": "System sells no Pro — its one payment is a voluntary contribution, so there is nothing to cancel"
+    },
+    "Tec-Nbf": {
+      "src/__tests__/sso-user-cookie.test.ts": "NBF's ALLOWED_AUDIENCES opens with a comment; its test reads past it to the first https origin"
     }
   }
 }
