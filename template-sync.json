@@ -90,7 +90,11 @@
     "types/assets.d.ts",
     "src/lib-client/pi/pi-auth.ts",
     "src/__tests__/pal-boundary.test.ts",
-    "src/__tests__/csp-connect-src.test.ts"
+    "src/__tests__/csp-connect-src.test.ts",
+    "src/lib/session-refresh.ts",
+    "src/__tests__/session-refresh.test.ts",
+    "src/__tests__/session-refresh-middleware.test.ts",
+    "src/__tests__/sso-refresh-token.test.ts"
   ],
   "markers": {
     "src/lib/pi-payment.ts": [
@@ -125,6 +129,12 @@
     ],
     "next.config.js": [
       "\"connect-src 'self'\""
+    ],
+    "src/middleware.ts": [
+      "refreshSessionIfNeeded"
+    ],
+    "src/app/api/auth/sso-callback/route.ts": [
+      "REFRESH_COOKIE"
     ]
   },
   "dependencies": [
