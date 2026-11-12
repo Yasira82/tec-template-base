@@ -89,7 +89,8 @@
     "tsconfig.json",
     "types/assets.d.ts",
     "src/lib-client/pi/pi-auth.ts",
-    "src/__tests__/pal-boundary.test.ts"
+    "src/__tests__/pal-boundary.test.ts",
+    "src/__tests__/csp-connect-src.test.ts"
   ],
   "markers": {
     "src/lib/pi-payment.ts": [
@@ -121,6 +122,9 @@
     ],
     "eslint.config.mjs": [
       "jsx-a11y"
+    ],
+    "next.config.js": [
+      "\"connect-src 'self'\""
     ]
   },
   "dependencies": [
