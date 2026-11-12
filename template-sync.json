@@ -87,13 +87,16 @@
     "src/lib/server/fetch-with-timeout.ts",
     "src/types/pi.types.ts",
     "tsconfig.json",
-    "types/assets.d.ts"
+    "types/assets.d.ts",
+    "src/lib-client/pi/pi-auth.ts",
+    "src/__tests__/pal-boundary.test.ts"
   ],
   "markers": {
     "src/lib/pi-payment.ts": [
       "HUB_FALLBACK",
       "product_id: params.itemId",
-      "PI_WALLET_DID_NOT_OPEN"
+      "PI_WALLET_DID_NOT_OPEN",
+      "PiRuntime.createPayment("
     ],
     "src/lib/pi/pi-session.ts": [
       "piUser",
@@ -143,7 +146,8 @@
       "src/__tests__/sign-in-gate.test.tsx": "Follows Life's own gate",
       "src/app/api/auth/logout/route.ts": "Life has no logout route",
       "src/lib/sdk.ts": "Life does not use the client sdk",
-      "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)"
+      "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)",
+      "src/lib-client/pi/pi-auth.ts": "Life signs in through pi-session (PiRuntime) only; it has no sdk-based sign-in"
     },
     "Tec-Connection": {
       "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)"
