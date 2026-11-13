@@ -71,7 +71,8 @@ src/app/api/auth/pi-login/route.ts         the app signs ITSELF in: Pi token →
 src/lib/pi/self-sign-in.ts                 standalone visit (Quest · campaign · Pi's app list) with no session → sign in once, never loop
 src/components/pi/SignInGate.tsx           the door: /app shows "Sign in with Pi" before any screen when there is no session (C-123 §10); a Hub visit goes straight through
 src/app/api/bff/payment/{create,approve,complete,resolve-incomplete}/route.ts
-src/app/api/bff/items/route.ts             example domain route (copy this pattern)
+docs/examples/bff-route.example.ts         example domain route — copy to src/app/api/bff/<resource>/
+src/lib/gateway-fetch.ts                   the ONE way a BFF calls the gateway (deadline past the gateway's 504; TEC-AUDIT-0033)
 src/app/api/health/route.ts                health endpoint (C-92/C-96) — fail-safe, public, never 500s
 src/app/api/ready/route.ts                 readiness (C-92/C-96) — public, 503 when a dependency is unusable
 src/lib/pi-payment.ts                      createPaymentRecord + createU2APayment

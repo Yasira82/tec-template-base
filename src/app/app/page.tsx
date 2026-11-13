@@ -14,7 +14,7 @@ import {
   createU2APayment,
 } from '@/lib/pi-payment';
 
-// TODO(new app): replace with real items from your BFF (/api/bff/items).
+// TODO(new app): replace with real items from your BFF (copy docs/examples/bff-route.example.ts).
 const DEMO_ITEM = { id: 'demo-1', name: 'Demo Item', price: 1 };
 
 function AppHomePage() {
@@ -50,7 +50,7 @@ function AppHomePage() {
       result.status === 'cancelled' ? 'Payment cancelled.' :
       `❌ ${result.message ?? 'Payment failed.'}`,
     );
-    // On success, create the domain record: POST /api/bff/items { ..., payment_id: internalId }
+    // On success, create the domain record: POST /api/bff/<resource> { ..., payment_id: internalId }
   };
 
   return (
