@@ -137,6 +137,9 @@
     ],
     "src/app/api/auth/sso-callback/route.ts": [
       "REFRESH_COOKIE"
+    ],
+    ".github/workflows/ci.yml": [
+      "npm run test:coverage"
     ]
   },
   "dependencies": [
@@ -145,7 +148,8 @@
     "react-dom",
     "@yasser172/tec-auth",
     "@yasser172/tec-sdk",
-    "@yasser172/tec-ui"
+    "@yasser172/tec-ui",
+    "@vitest/coverage-v8"
   ],
   "untracked": {
     "Tec-App": "The Hub: its own codebase (tec-frontend/), not made from this template",
