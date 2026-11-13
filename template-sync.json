@@ -140,6 +140,9 @@
     ],
     ".github/workflows/ci.yml": [
       "npm run test:coverage"
+    ],
+    "package.json": [
+      "\"node\": \"22.x\""
     ]
   },
   "dependencies": [
