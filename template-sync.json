@@ -175,7 +175,8 @@
     "@yasser172/tec-auth",
     "@yasser172/tec-sdk",
     "@yasser172/tec-ui",
-    "@vitest/coverage-v8"
+    "@vitest/coverage-v8",
+    "happy-dom"
   ],
   "untracked": {
     "Tec-App": "The Hub: its own codebase (tec-frontend/), not made from this template",
