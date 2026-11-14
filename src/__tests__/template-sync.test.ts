@@ -71,7 +71,9 @@ describe('checkApp / applyApp', () => {
     writeFileSync(join(app, markerFile), readFileSync(join(app, markerFile), 'utf8').split(needle).join('X'));
     const pkg = JSON.parse(readFileSync(join(app, 'package.json'), 'utf8'));
     pkg.dependencies.next = '0.0.1';
-    writeFileSync(join(app, 'package.json'), JSON.stringify(pkg));
+    // Written the way the real file is (2-space JSON), so only the version changes —
+    // a compact rewrite also erased the `"node": "22.x"` marker (Run 5 broke this test).
+    writeFileSync(join(app, 'package.json'), JSON.stringify(pkg, null, 2));
 
     const kinds = sync.checkApp({ appDir: app, repo: 'Tec-Example' }).map((p: { kind: string; file: string }) => `${p.kind}:${p.file}`);
     expect(kinds).toEqual(expect.arrayContaining([
