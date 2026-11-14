@@ -91,6 +91,12 @@ export function checkApp({ templateDir = TEMPLATE_DIR, appDir, repo = '', manife
 
 /** Copy every shared file the app lacks or differs on. Markers and versions are left to a person. */
 export function applyApp({ templateDir = TEMPLATE_DIR, appDir, repo = '', manifest = loadManifest(templateDir) }) {
+  // An app not made from the template has none of its files to restore: applying
+  // would COPY dozens of them in. It did, once (14 Nov 2026 — Commerce, Assets,
+  // Ecommerce and the Hub, in one loop; caught before anything was pushed).
+  if (repo && manifest.untracked?.[repo]) {
+    throw new Error(`${repo} is not made from the template (template-sync.json "untracked": ${manifest.untracked[repo]}) — refusing to apply`);
+  }
   const copied = [];
   for (const p of checkApp({ templateDir, appDir, repo, manifest })) {
     if (p.kind !== 'missing' && p.kind !== 'differs') continue;

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -96,6 +96,18 @@ describe('checkApp / applyApp', () => {
     expect(copied).toEqual(expect.arrayContaining([manifest.shared[0], manifest.shared[1], fleetFile]));
     expect(readFileSync(join(app, fleetFile))).toEqual(readFileSync(join(ROOT, 'fleet', fleetFile)));
     expect(left.map((p: { kind: string }) => p.kind).sort()).toEqual(['dependency', 'marker']);
+  });
+});
+
+describe('apply refuses an app that is not made from the template', () => {
+  it('throws for every untracked repo, and copies nothing', () => {
+    const empty = mkdtempSync(join(tmpdir(), 'tsync-untracked-'));
+    try {
+      for (const repo of Object.keys(manifest.untracked)) {
+        expect(() => sync.applyApp({ appDir: empty, repo })).toThrow(/not made from the template/);
+      }
+      expect(readdirSync(empty)).toEqual([]);
+    } finally { rmSync(empty, { recursive: true, force: true }); }
   });
 });
 
