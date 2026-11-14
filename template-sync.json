@@ -116,7 +116,10 @@
     "src/__tests__/sdk-boundary.test.ts",
     "src/lib/subscription/read-pro-state.ts",
     "src/__tests__/read-pro-state.test.ts",
-    "src/__tests__/pro-reader-guard.test.ts"
+    "src/__tests__/pro-reader-guard.test.ts",
+    "src/app/api/bff/subscription/route.ts",
+    "src/lib/subscription/pro-status.ts",
+    "src/__tests__/app-pro.test.ts"
   ],
   "markers": {
     "src/lib/pi-payment.ts": [
@@ -163,9 +166,6 @@
     ],
     "package.json": [
       "\"node\": \"22.x\""
-    ],
-    "src/app/api/bff/subscription/route.ts": [
-      "isTestnetHost(req.headers.get('host'))"
     ]
   },
   "dependencies": [
@@ -223,7 +223,8 @@
     "Tec-system": {
       "src/app/api/bff/subscription/cancel/route.ts": "System sells no Pro — its one payment is a voluntary contribution, so there is nothing to cancel",
       "src/components/pro/CancelProButton.tsx": "System sells no Pro (voluntary support only, C-110 §7): there is no plan to show or cancel",
-      "src/app/api/bff/subscription/route.ts": "System sells no Pro (voluntary support only, C-110 §7): there is no plan to show or cancel"
+      "src/app/api/bff/subscription/route.ts": "System sells no Pro (voluntary support only, C-110 §7): there is no plan to show or cancel",
+      "src/__tests__/app-pro.test.ts": "System sells no Pro (voluntary support only, C-110 §7): there is no plan to show or cancel"
     },
     "Tec-Nbf": {
       "src/app/api/referral/route.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
