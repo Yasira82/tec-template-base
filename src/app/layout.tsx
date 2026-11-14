@@ -1,6 +1,8 @@
 import { PiWarmup }      from '@/components/pi/PiWarmup';
 import { ArrivalReport } from '@/components/pioneer/ArrivalReport';
 import { QuestReturn } from '@/components/pioneer/QuestReturn';
+import { RefCapture } from '@/components/referral/RefCapture';
+import { RefApply } from '@/components/referral/RefApply';
 import { HUB_HOSTS } from '@/lib/pi-network';
 import type { Metadata } from 'next';
 import { APP_META } from '@/lib/app-meta';
@@ -132,7 +134,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body><PiWarmup /><ArrivalReport /><QuestReturn />{children}</body>
+      <body>
+        <PiWarmup /><ArrivalReport /><QuestReturn />
+        {/* The referral loop (C-133): keep ?ref= from the landing, apply it once signed in. */}
+        <RefCapture /><RefApply />
+        {children}
+      </body>
     </html>
   );
 }

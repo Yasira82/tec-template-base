@@ -96,7 +96,20 @@
     "src/lib/session-refresh.ts",
     "src/__tests__/session-refresh.test.ts",
     "src/__tests__/session-refresh-middleware.test.ts",
-    "src/__tests__/sso-refresh-token.test.ts"
+    "src/__tests__/sso-refresh-token.test.ts",
+    "src/app/api/auth/me/route.ts",
+    "src/lib/auth/session-cookies.ts",
+    "src/__tests__/me-cookies.test.ts",
+    "src/lib-client/hooks/useMe.ts",
+    "src/__tests__/use-me-reason.test.ts",
+    "src/components/ErrorBoundary.tsx",
+    "src/components/pro/CancelProButton.tsx",
+    "src/app/api/referral/route.ts",
+    "src/components/referral/RefApply.tsx",
+    "src/components/referral/RefCapture.tsx",
+    "src/components/referral/InviteCard.tsx",
+    "src/lib-client/referral.ts",
+    "src/__tests__/referral.test.ts"
   ],
   "markers": {
     "src/lib/pi-payment.ts": [
@@ -143,6 +156,9 @@
     ],
     "package.json": [
       "\"node\": \"22.x\""
+    ],
+    "src/app/api/bff/subscription/route.ts": [
+      "isTestnetHost(req.headers.get('host'))"
     ]
   },
   "dependencies": [
@@ -170,22 +186,62 @@
       "src/app/api/auth/logout/route.ts": "Life has no logout route",
       "src/lib/sdk.ts": "Life does not use the client sdk",
       "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)",
-      "src/lib-client/pi/pi-auth.ts": "Life signs in through pi-session (PiRuntime) only; it has no sdk-based sign-in"
+      "src/lib-client/pi/pi-auth.ts": "Life signs in through pi-session (PiRuntime) only; it has no sdk-based sign-in",
+      "src/components/referral/InviteCard.tsx": "Its own translated copy (i18n) and icons; the same card and calls as the template's",
+      "src/components/pro/CancelProButton.tsx": "Its own translated copy (i18n) and palette; the logic is the template's — the two-shape fix applied by hand on 14 Nov 2026",
+      "src/components/ErrorBoundary.tsx": "Built from this app's own palette (C, light and dark themes) instead of the template's tokens; same behaviour"
     },
     "Tec-Connection": {
-      "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)"
+      "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)",
+      "src/components/referral/InviteCard.tsx": "Its own translated copy (i18n) and icons; the same card and calls as the template's",
+      "src/components/pro/CancelProButton.tsx": "Its own translated copy (i18n) and palette; the logic is the template's — the two-shape fix applied by hand on 14 Nov 2026",
+      "src/components/ErrorBoundary.tsx": "Built from this app's own palette (C, light and dark themes) instead of the template's tokens; same behaviour"
     },
     "Tec-Explorer": {
-      "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)"
+      "src/components/pioneer/QuestReturn.tsx": "Colours from this repo's token map (the fleet's one variant)",
+      "src/app/api/referral/route.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/RefApply.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/RefCapture.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/InviteCard.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/lib-client/referral.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/__tests__/referral.test.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/pro/CancelProButton.tsx": "Its own translated copy (i18n) and palette; the logic is the template's — the two-shape fix applied by hand on 14 Nov 2026",
+      "src/components/ErrorBoundary.tsx": "Built from this app's own palette (C, light and dark themes) instead of the template's tokens; same behaviour"
     },
     "Tec-Zone": {
-      "src/app/pi-test/ArrivalTracePanel.tsx": "Zone's panel writes its colours as literals; same panel otherwise"
+      "src/app/pi-test/ArrivalTracePanel.tsx": "Zone's panel writes its colours as literals; same panel otherwise",
+      "src/components/referral/InviteCard.tsx": "Its own translated copy (i18n) and icons; the same card and calls as the template's",
+      "src/components/pro/CancelProButton.tsx": "Its own translated copy (i18n) and palette; the logic is the template's — the two-shape fix applied by hand on 14 Nov 2026"
     },
     "Tec-system": {
-      "src/app/api/bff/subscription/cancel/route.ts": "System sells no Pro — its one payment is a voluntary contribution, so there is nothing to cancel"
+      "src/app/api/bff/subscription/cancel/route.ts": "System sells no Pro — its one payment is a voluntary contribution, so there is nothing to cancel",
+      "src/components/pro/CancelProButton.tsx": "System sells no Pro (voluntary support only, C-110 §7): there is no plan to show or cancel",
+      "src/app/api/bff/subscription/route.ts": "System sells no Pro (voluntary support only, C-110 §7): there is no plan to show or cancel"
     },
     "Tec-Nbf": {
-      "src/__tests__/sso-user-cookie.test.ts": "NBF's ALLOWED_AUDIENCES opens with a comment; its test reads past it to the first https origin"
+      "src/__tests__/sso-user-cookie.test.ts": "NBF's ALLOWED_AUDIENCES opens with a comment; its test reads past it to the first https origin",
+      "src/app/api/referral/route.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/RefApply.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/RefCapture.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/InviteCard.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/lib-client/referral.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/__tests__/referral.test.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)"
+    },
+    "Tec-Analytics-": {
+      "src/app/api/referral/route.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/RefApply.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/RefCapture.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/InviteCard.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/lib-client/referral.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/__tests__/referral.test.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)"
+    },
+    "Tec-Brookfield": {
+      "src/app/api/referral/route.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/RefApply.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/RefCapture.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/components/referral/InviteCard.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/lib-client/referral.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
+      "src/__tests__/referral.test.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)"
     }
   }
 }
