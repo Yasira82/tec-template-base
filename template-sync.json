@@ -109,7 +109,10 @@
     "src/components/referral/RefCapture.tsx",
     "src/components/referral/InviteCard.tsx",
     "src/lib-client/referral.ts",
-    "src/__tests__/referral.test.ts"
+    "src/__tests__/referral.test.ts",
+    "src/app/api/bff/payment/create/route.ts",
+    "src/__tests__/sso-callback-carry-on.test.ts",
+    "src/__tests__/pi-network.test.ts"
   ],
   "markers": {
     "src/lib/pi-payment.ts": [
@@ -219,7 +222,6 @@
       "src/app/api/bff/subscription/route.ts": "System sells no Pro (voluntary support only, C-110 §7): there is no plan to show or cancel"
     },
     "Tec-Nbf": {
-      "src/__tests__/sso-user-cookie.test.ts": "NBF's ALLOWED_AUDIENCES opens with a comment; its test reads past it to the first https origin",
       "src/app/api/referral/route.ts": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
       "src/components/referral/RefApply.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
       "src/components/referral/RefCapture.tsx": "The referral loop (C-133) is not wired in this app; adding it is the owner's product decision (TEC-AUDIT-0044, 14 Nov 2026)",
