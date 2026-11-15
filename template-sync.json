@@ -35,6 +35,7 @@
     "src/__tests__/arrival-after-pi-signin.test.tsx",
     "src/__tests__/arrival-diagnostic-reason.test.ts",
     "src/__tests__/arrival-report.test.ts",
+    "src/__tests__/arrival-retry-after-401.test.tsx",
     "src/__tests__/arrival-trace.test.tsx",
     "src/__tests__/bff-payment-handlers.test.ts",
     "src/__tests__/counted-once-warmup.test.tsx",
