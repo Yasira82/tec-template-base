@@ -3,7 +3,7 @@ import type { Translations } from './en';
 export const vi: Translations = {
   common: {
     appName:    "TEC",
-    tagline:    "The Elite Consortium",
+    tagline:    "TEC Ecosystem",
     login:      "Đăng nhập bằng Pi",
     logout:     "Đăng xuất",
     loading:    "Đang tải...",
