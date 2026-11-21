@@ -39,6 +39,7 @@
     "src/__tests__/arrival-trace.test.tsx",
     "src/__tests__/bff-payment-handlers.test.ts",
     "src/__tests__/counted-once-warmup.test.tsx",
+    "src/__tests__/csp-report-only.test.ts",
     "src/__tests__/health-route.test.ts",
     "src/__tests__/middleware-location.test.ts",
     "src/__tests__/pal-and-flags.test.ts",
@@ -51,7 +52,9 @@
     "src/__tests__/session-cookies-partitioned.test.ts",
     "src/__tests__/session-cookies-renewal.test.ts",
     "src/__tests__/sign-in-gate.test.tsx",
+    "src/__tests__/sso-callback-carry-on.test.ts",
     "src/__tests__/sso-cookie-domain.test.ts",
+    "src/__tests__/sso-once.test.ts",
     "src/__tests__/sso-user-cookie.test.ts",
     "src/app/api/auth/logout/route.ts",
     "src/app/api/auth/pi-login/route.ts",
@@ -62,6 +65,7 @@
     "src/app/api/bff/payment/resolve-incomplete/route.ts",
     "src/app/api/bff/pioneer/arrived/route.ts",
     "src/app/api/bff/subscription/cancel/route.ts",
+    "src/app/api/csp-report/route.ts",
     "src/app/api/health/route.ts",
     "src/app/api/ready/route.ts",
     "src/app/pi-test/ArrivalTracePanel.tsx",
@@ -86,6 +90,7 @@
     "src/lib/sdk.ts",
     "src/lib/server/e2e-mode.ts",
     "src/lib/server/fetch-with-timeout.ts",
+    "src/lib/sso-once.ts",
     "src/types/pi.types.ts",
     "tsconfig.json",
     "types/assets.d.ts"
@@ -119,6 +124,14 @@
     ],
     "eslint.config.mjs": [
       "jsx-a11y"
+    ],
+    "src/app/api/auth/sso-callback/route.ts": [
+      "await firstUse(jti, accessToken)",
+      "carryOn('no_jti')"
+    ],
+    "next.config.js": [
+      "Content-Security-Policy-Report-Only",
+      "report-uri /api/csp-report"
     ]
   },
   "dependencies": [
