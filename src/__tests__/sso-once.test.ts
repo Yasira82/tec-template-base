@@ -16,7 +16,7 @@ import { GET } from '../app/api/auth/sso-callback/route';
 
 const SECRET = 'sso-secret-for-tests-at-least-32-chars!!';
 const ORIGIN = readFileSync(join(process.cwd(), 'src/app/api/auth/sso-callback/route.ts'), 'utf8')
-  .match(/ALLOWED_AUDIENCES = \[\s*'([^']+)'/)?.[1] as string;
+  .match(/ALLOWED_AUDIENCES = \[[\s\S]*?'(https:\/\/[^']+)'/)?.[1] as string;
 
 const saved = { ...process.env };
 let calls: { url: string; init: RequestInit }[];
