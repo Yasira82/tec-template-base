@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
         if (host && typeof v.directive === 'string') log.warn('csp.would_block', { directive: v.directive.slice(0, 40), host: host.slice(0, 120) });
       }
     }
-  } catch { /* not a report — nothing to log */ }
+    // A body that is not a report carries nothing worth logging (no-silent-failures: the agreed marker).
+  } catch { /* ignore */ }
   return new NextResponse(null, { status: 204 });
 }
