@@ -131,7 +131,8 @@
     ],
     "next.config.js": [
       "Content-Security-Policy-Report-Only",
-      "report-uri /api/csp-report"
+      "report-uri /api/csp-report",
+      "https://*.socialchain.app"
     ]
   },
   "dependencies": [
