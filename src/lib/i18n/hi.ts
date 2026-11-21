@@ -3,7 +3,7 @@ import type { Translations } from './en';
 export const hi: Translations = {
   common: {
     appName:    "TEC",
-    tagline:    "The Elite Consortium",
+    tagline:    "TEC Ecosystem",
     login:      "Pi से साइन इन करें",
     logout:     "लॉग आउट",
     loading:    "लोड हो रहा है...",

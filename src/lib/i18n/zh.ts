@@ -3,7 +3,7 @@ import type { Translations } from './en';
 export const zh: Translations = {
   common: {
     appName:    "TEC",
-    tagline:    "The Elite Consortium",
+    tagline:    "TEC Ecosystem",
     login:      "使用 Pi 登录",
     logout:     "退出登录",
     loading:    "加载中...",
