@@ -67,6 +67,8 @@ Identity is derived from the `tec_user` cookie server-side — **never from the 
 middleware.ts                              CSRF (double-submit OR Origin) + page guard
 src/app/api/auth/sso-callback/route.ts     Hub SSO landing (open-redirect-safe)
 src/app/api/auth/refresh/route.ts          token refresh
+src/lib/sso-once.ts                        a sign-in token used ONCE across every instance — asked of auth-service (/api/auth/sso/consume); no jti, or no answer → refused (P6)
+src/app/api/csp-report/route.ts            where the Report-Only connect-src list reports what it WOULD block (host only) — enforce the named list only after a Pi Browser sign-in and payment report nothing (TEC-AUDIT-0051)
 src/app/api/auth/pi-login/route.ts         the app signs ITSELF in: Pi token → one-time token for its own sso-callback (C-123 §3)
 src/lib/pi/self-sign-in.ts                 standalone visit (Quest · campaign · Pi's app list) with no session → sign in once, never loop
 src/components/pi/SignInGate.tsx           the door: /app shows "Sign in with Pi" before any screen when there is no session (C-123 §10); a Hub visit goes straight through
